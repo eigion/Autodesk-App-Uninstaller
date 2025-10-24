@@ -57,7 +57,4 @@ An interactive **Windows batch + PowerShell** tool to uninstall **Autodesk** sof
 
 > Cleanup is **optional**. Skip it if you plan to keep any Autodesk product or shared libraries.
 
----
-
-## Example Session
 
