@@ -1,60 +1,49 @@
-# Autodesk Remover (Interactive, Windows)
+# Autodesk Remover (Interactive, Windows · PowerShell 5.1 Compatible)
 
-An interactive **Windows batch + PowerShell** tool to uninstall **Autodesk** software. It inventories installed Autodesk apps, lets you select **single**, **multiple**, or **all** (e.g., `1,2,5,6` or `A`), confirms, runs **silent uninstallers**, and optionally **cleans leftovers** (folders + registry). All actions are **timestamp-logged**.
+An interactive **PowerShell** tool to remove **Autodesk** software from Windows.  
+It enumerates installed Autodesk apps, lets you select **single**, **multiple**, or **all** (e.g., `1,2,5` or `A`), optionally stops Autodesk services/processes, launches each vendor’s uninstaller, and can perform leftover cleanup (folders + registry). A transcript log is saved to **Documents**.
 
-> **Use with care.** This can remove Autodesk apps system-wide. Back up custom content (templates, families, palettes, add-ins, license files) before running.
+> **Safety first**
+>
+> - This can remove Autodesk apps system-wide. **Back up** templates, families, palettes, add-ins, and license info.  
+> - Cleanup is optional and best-effort. Reboot after completion.
+
+---
+
+## What’s inside
+
+- `Autodesk_Remover_Standalone.ps1` — the standalone, **PowerShell 5.1–compatible** script (no ternary/safe-nav operators; works on stock Win10/11).
+- (Optional) You can add your own wrapper `.cmd` if you prefer launching from Command Prompt; the `.ps1` is all you need.
 
 ---
 
 ## Features
 
-- **Interactive picker** — choose `1,2,5,6`… or `A` (all), `Q` (quit)
-- **Admin self-elevation** — prompts for elevation automatically
-- **Graceful shutdown** — stops Autodesk services/processes first
-- **Silent uninstall** — prioritizes `QuietUninstallString` and augments with quiet flags if needed
-- **Optional cleanup** — removes common Autodesk directories and registry keys
-- **Detailed logging** — timestamped log saved next to the script
+- **Interactive picker**: choose indices like `1,2,5` or `A` for all; `Q` to quit.
+- **Vendor uninstallers**: uses `QuietUninstallString` when available; adds silent flags conservatively.
+- **Optional pre-uninstall handling**:
+  - Stop **Autodesk services** (Licensing, Desktop App, Genuine) with timeout.
+  - **Process handling**: None / Auto (graceful→kill) / Force.
+- **Optional cleanup**: removes common Autodesk directories and registry keys.
+- **Transcript logging**: writes a timestamped log to **Documents**.
 
 ---
 
 ## Requirements
 
-- **OS:** Windows 10/11 (64-bit)
-- **Permissions:** Local Administrator (the script self-elevates if needed)
+- **OS**: Windows 10 or 11 (x64)
+- **Shell**: Windows PowerShell **5.1** (default on Win10/11)
+- **Privileges**: Run **as Administrator**
 
 ---
 
 ## Quick Start
 
-1. Download `Remove_Autodesk_Interactive.cmd` to a local folder.
-2. **Right-click → Run as administrator.**
-3. Review the detected list, then enter:
-   - `1,2,5,6` to remove specific entries
-   - `A` for **All**
-   - `Q` to quit
-4. Confirm when prompted.
-5. Choose whether to perform **leftover cleanup** (folders + registry).
-6. **Reboot** when finished.
-
-**Log file:** created beside the script, e.g.  
-`Autodesk_Uninstall_YYYY-MM-DD_HH-MM-SS.log`
-
----
-
-## What Gets Removed
-
-- Any installed product where **Publisher = Autodesk** or **DisplayName** begins with **Autodesk** (e.g., AutoCAD, Revit, 3ds Max, Inventor, Desktop App, Licensing).
-- *(Optional)* Common leftovers:
-  - `C:\Program Files\Autodesk`
-  - `C:\Program Files (x86)\Autodesk`
-  - `...\Common Files\Autodesk Shared`
-  - `%ProgramData%\Autodesk`, `%AppData%\Autodesk`, `%LocalAppData%\Autodesk`
-  - `%Public%\Documents\Autodesk`
-- *(Optional)* Registry keys:
-  - `HKLM\SOFTWARE\Autodesk`
-  - `HKLM\SOFTWARE\WOW6432Node\Autodesk`
-  - `HKCU\SOFTWARE\Autodesk`
-
-> Cleanup is **optional**. Skip it if you plan to keep any Autodesk product or shared libraries.
-
-
+1. Download `Autodesk_Remover_Standalone.ps1` to a local folder (e.g., `C:\Tools` or `D:\AI_Playground`).
+2. Open **PowerShell (Admin)**:
+   - Start menu → type “PowerShell” → right-click **Windows PowerShell** → **Run as administrator**.
+3. Run the script:
+   ```powershell
+   cd D:\AI_Playground          # change to your folder
+   Unblock-File .\Autodesk_Remover_Standalone.ps1
+   powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -File .\Autodesk_Remover_Standalone.ps1
