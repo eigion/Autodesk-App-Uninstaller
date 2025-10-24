@@ -44,6 +44,6 @@ It enumerates installed Autodesk apps, lets you select **single**, **multiple**,
    - Start menu → type “PowerShell” → right-click **Windows PowerShell** → **Run as administrator**.
 3. Run the script:
    ```powershell
-   cd D:\AI_Playground          # change to your folder
+   cd D:\path\to         # change to your folder
    Unblock-File .\Autodesk_Remover_Standalone.ps1
    powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -File .\Autodesk_Remover_Standalone.ps1
